@@ -15,4 +15,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run tests
-        run: echo "HTML project: CI passed ✅"
+        run: |
+          echo HTML project: CI passed
