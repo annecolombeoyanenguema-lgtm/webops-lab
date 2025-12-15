@@ -14,20 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install || echo "No dependencies to install"
-
       - name: Run tests
         run: echo "Tests passed ✅"
 
-      - name: Build artifact
-        run: echo "Build artifact simulated 🚀"
-
       - name: Add test comment to trigger CI
-        run: |
-          echo "<!-- test CI trigger -->" >> app/index.html
+        run: echo "<!-- test CI trigger -->" >> app/index.html
