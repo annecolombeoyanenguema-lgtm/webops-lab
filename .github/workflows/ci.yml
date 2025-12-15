@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Simplify CI workflow for html project
 
 on:
   push:
@@ -14,6 +14,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run tests
-        run: |
-          echo HTML project: CI passed
+      - name: Simple build log
+        run: echo "CI OK 🚀 <!-- test CI trigger -->"
