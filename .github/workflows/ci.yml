@@ -27,3 +27,7 @@ jobs:
 
       - name: Build artifact
         run: echo "Build artifact simulated 🚀"
+
+      - name: Add test comment to trigger CI
+        run: |
+          echo "<!-- test CI trigger -->" >> app/index.html
