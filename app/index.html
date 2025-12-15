@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebOps Lab - Colombe</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: #0f0c29;
+      color: #fff;
+      text-align: center;
+    }
+
+    /* Étoiles animées */
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    h1 {
+      font-size: 4rem;
+      color: #00ffe0;
+      text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0, 0 0 30px #00ffe0;
+      animation: neonGlow 2s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+
+    @keyframes neonGlow {
+      from { text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0; }
+      to { text-shadow: 0 0 20px #00ffe0, 0 0 40px #00ffe0, 0 0 60px #00ffe0; }
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      z-index: 1;
+      animation: fadeIn 4s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Bienvenue sur la page de COLOMBE ✨</h1>
+  <p>Explore ton laboratoire WebOps futuriste !</p>
+
+  <script>
+    // Génération de 100 étoiles aléatoires
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.top = Math.random() * window.innerHeight + 'px';
+      star.style.left = Math.random() * window.innerWidth + 'px';
+      star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+      star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+      document.body.appendChild(star);
+    }
+  </script>
+</body>
+</html>
