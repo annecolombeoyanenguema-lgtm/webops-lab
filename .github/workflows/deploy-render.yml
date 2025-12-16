@@ -10,23 +10,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout
+      # 1️⃣ Récupérer le code du repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Installer Render CLI
-      - name: Install Render CLI
-        run: |
-          curl -L https://cli.render.com/install | bash
-          echo "$HOME/.render/bin" >> $GITHUB_PATH
-
-      # 3️⃣ Déployer sur Render
-      - name: Deploy to Render
+      # 2️⃣ Installer Render CLI et déployer dans le même step
+      - name: Install Render CLI and Deploy
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
+          # Installer Render CLI
+          curl -L https://cli.render.com/install | bash
+          export PATH="$HOME/.render/bin:$PATH"
+          echo "Render CLI version : $(render --version)"
+
+          # Déployer sur Render
           render deploy service srv-d5095e7pm1nc73c6sgng --wait
 
-      # 4️⃣ Message dans log
-      - name: Log success
-        run: echo "🚀 Déploiement Render terminé"
+      # 3️⃣ Statut GitHub : succès
+      - name: Deployment Status Success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: "success",
+              context: "Render Deployment",
+              description: "Déploiement sur Render réussi ✅",
+              target_url: "https://webops-lab.onrender.com"
+            })
+
+      # 4️⃣ Statut GitHub : échec
+      - name: Deployment Status Failed
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: "failure",
+              context: "Render Deployment",
+              description: "Déploiement sur Render échoué ❌"
+            })
