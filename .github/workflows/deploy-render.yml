@@ -3,7 +3,7 @@ name: Deploy to Render
 on:
   push:
     branches:
-      - main  # se déclenche à chaque push sur main
+      - main
 
 jobs:
   deploy:
@@ -22,6 +22,11 @@ jobs:
       # 3️⃣ Déployer sur Render avec la clé secrète
       - name: Deploy to Render
         env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}  # clé que tu as ajoutée
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
         run: |
           render deploy service srv-d5095e7pm1nc73c6sgng --wait
+
+      # 4️⃣ Notification de succès
+      - name: Deployment success
+        if: success()
+        run: echo "🚀 Déploiement Render réussi — WebOps Lab est en ligne"
