@@ -18,6 +18,7 @@ jobs:
       - name: Install Render CLI
         run: |
           curl -L https://cli.render.com/install | bash
+          echo "$HOME/.render/bin" >> $GITHUB_PATH
 
       # 3️⃣ Déployer sur Render avec la clé secrète
       - name: Deploy to Render
@@ -30,3 +31,9 @@ jobs:
       - name: Deployment success
         if: success()
         run: echo "🚀 Déploiement Render réussi — WebOps Lab est en ligne"
+
+      # 5️⃣ Notification d’échec
+      - name: Deployment failed
+        if: failure()
+        run: echo "❌ Déploiement Render échoué — vérifie les logs GitHub Actions"
+
