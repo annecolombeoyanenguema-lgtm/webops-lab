@@ -14,11 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Installer l’outil CLI de Render
+      # 2️⃣ Installer l’outil CLI de Render et vérifier qu’il est disponible
       - name: Install Render CLI
         run: |
           curl -L https://cli.render.com/install | bash
           echo "$HOME/.render/bin" >> $GITHUB_PATH
+      - name: Check Render CLI
+        run: render --version
 
       # 3️⃣ Déployer sur Render avec la clé secrète
       - name: Deploy to Render
@@ -27,8 +29,9 @@ jobs:
         run: |
           render deploy service srv-d5095e7pm1nc73c6sgng --wait
 
-      # 4️⃣ Notification de succès dans GitHub Actions
-      - name: Deployment Status
+      # 4️⃣ Ajouter le statut GitHub du déploiement si succès
+      - name: Deployment Status Success
+        if: success()
         uses: actions/github-script@v7
         with:
           script: |
@@ -42,12 +45,27 @@ jobs:
               target_url: "https://webops-lab.onrender.com"
             })
 
-      # 5️⃣ Message dans le log Actions si succès
+      # 5️⃣ Ajouter le statut GitHub du déploiement si échec
+      - name: Deployment Status Failed
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: "failure",
+              context: "Render Deployment",
+              description: "Déploiement sur Render échoué ❌"
+            })
+
+      # 6️⃣ Message dans le log Actions si succès
       - name: Deployment success
         if: success()
         run: echo "🚀 Déploiement Render réussi — WebOps Lab est en ligne"
 
-      # 6️⃣ Message dans le log Actions si échec
+      # 7️⃣ Message dans le log Actions si échec
       - name: Deployment failed
         if: failure()
         run: echo "❌ Déploiement Render échoué — vérifie les logs GitHub Actions"
