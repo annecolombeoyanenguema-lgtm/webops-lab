@@ -2,78 +2,168 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <title>Colombe — Portfolio 3D Simple</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebOps Lab - Colombe</title>
+
+  <!-- THREE.JS -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
   <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      margin: 0;
-      height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      background: #0f0c29;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #0f2027, #000);
       color: #fff;
-      text-align: center;
+      overflow: hidden;
+    }
+    canvas {
+      position: fixed;
+      inset:0;
+      z-index:0;
     }
 
-    /* Étoiles animées */
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 3s infinite;
+    /* MENU */
+    .ui {
+      position: fixed;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
     }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.2; }
-      50% { opacity: 1; }
-    }
-
-    h1 {
-      font-size: 4rem;
+    .ui button {
+      display: block;
+      margin: 14px 0;
+      padding: 14px 28px;
+      background: rgba(0,255,255,0.08);
+      border: 1px solid #00ffe0;
       color: #00ffe0;
-      text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0, 0 0 30px #00ffe0;
-      animation: neonGlow 2s ease-in-out infinite alternate;
-      z-index: 1;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 10px;
+      transition: all 0.35s ease;
+    }
+    .ui button:hover, .ui button.active {
+      background: #00ffe0;
+      color: #000;
+      transform: translateX(14px) scale(1.05);
+      box-shadow: 0 0 20px #00ffe0;
     }
 
-    @keyframes neonGlow {
-      from { text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0; }
-      to { text-shadow: 0 0 20px #00ffe0, 0 0 40px #00ffe0, 0 0 60px #00ffe0; }
+    /* SECTIONS */
+    .section {
+      position: fixed;
+      right:5%;
+      top:50%;
+      transform: translateY(-50%);
+      width:42%;
+      padding:32px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid #00ffe0;
+      border-radius:16px;
+      display:none;
+      z-index:2;
+      backdrop-filter: blur(10px);
+    }
+    .section h2 { color:#00ffe0; margin-bottom:18px; font-size:1.8rem; }
+    .section p, .section li { font-size:1.05rem; line-height:1.6; opacity:0.9; }
+    .section ul { padding-left:20px; }
+
+    @keyframes appear {
+      from {opacity:0; transform: translateY(-50%) scale(0.92);}
+      to {opacity:1; transform: translateY(-50%) scale(1);}
     }
 
-    p {
-      font-size: 1.5rem;
-      margin-top: 20px;
-      z-index: 1;
-      animation: fadeIn 4s ease forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+    .signature { position: fixed; bottom:20px; right:30px; font-size:0.9rem; opacity:0.6; z-index:2;}
   </style>
 </head>
 <body>
-  <h1>Bienvenue sur la page de COLOMBE ✨</h1>
-  <p>Explore ton laboratoire WebOps futuriste !</p>
 
-  <script>
-    // Génération de 100 étoiles aléatoires
-    for (let i = 0; i < 100; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.top = Math.random() * window.innerHeight + 'px';
-      star.style.left = Math.random() * window.innerWidth + 'px';
-      star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
-      star.style.animationDuration = (Math.random() * 2 + 1) + 's';
-      document.body.appendChild(star);
-    }
-  </script>
+<!-- MENU -->
+<div class="ui">
+  <button onclick="showSection('home', this)">Home</button>
+  <button onclick="showSection('about', this)">About</button>
+  <button onclick="showSection('skills', this)">Skills</button>
+  <button onclick="showSection('services', this)">Services</button>
+  <button onclick="showSection('blog', this)">Blog</button>
+  <button onclick="showSection('contact', this)">Contact</button>
+</div>
+
+<!-- SECTIONS -->
+<div id="home" class="section">
+  <h2>Bienvenue ✨</h2>
+  <p>Je suis <strong>Colombe</strong>, bienvenue dans mon portfolio 3D interactif !</p>
+</div>
+<div id="about" class="section">
+  <h2>À propos</h2>
+  <p>Passionnée par l’IA et le DevOps, je construis des expériences futuristes.</p>
+</div>
+<div id="skills" class="section">
+  <h2>Compétences</h2>
+  <ul>
+    <li>JavaScript · Python · PHP</li>
+    <li>Docker · CI/CD · GitHub Actions</li>
+    <li>IA & Automatisation</li>
+  </ul>
+</div>
+<div id="services" class="section">
+  <h2>Services</h2>
+  <p>Développement Web, automatisation DevOps, prototypes IA et interfaces innovantes.</p>
+</div>
+<div id="blog" class="section">
+  <h2>Blog</h2>
+  <p>Articles à venir sur IA, DevOps et futur du web.</p>
+</div>
+<div id="contact" class="section">
+  <h2>Contact</h2>
+  <p>📧 colombe.dev@email.com</p>
+</div>
+
+<div class="signature">WebOps Lab • Colombe</div>
+
+<script>
+  // Navigation boutons
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+    document.querySelectorAll('.ui button').forEach(b=>b.classList.remove('active'));
+    document.getElementById(id).style.display='block';
+    btn.classList.add('active');
+  }
+
+  // Default
+  showSection('home', document.querySelector('.ui button'));
+
+  // THREE.JS Boule 3D
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.z = 7;
+  const renderer = new THREE.WebGLRenderer({ alpha:true, antialias:true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const geometry = new THREE.SphereGeometry(2.5, 64, 64);
+  const material = new THREE.MeshStandardMaterial({ color:0x00ffe0, wireframe:true });
+  const sphere = new THREE.Mesh(geometry, material);
+  scene.add(sphere);
+
+  const light = new THREE.PointLight(0x00ffe0, 1.2);
+  light.position.set(6,6,6);
+  scene.add(light);
+
+  function animate(){
+    requestAnimationFrame(animate);
+    sphere.rotation.x += 0.001;
+    sphere.rotation.y += 0.002;
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener('resize', ()=>{
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+
 </body>
 </html>
